@@ -9,17 +9,37 @@ import Paper from '@mui/material/Paper';
 import {useEffect, useState} from 'react';
 import {Box, Toolbar, Typography} from '@mui/material';
 import {getCompanyData} from '../company-data-generator';
+import TablePagination from '@mui/material/TablePagination';
 
 function CompanyTable() {
   let [rows, setRows] = useState([]);
+  const [page, setPage] = React.useState(2);
+  const [rowsPerPage, setRowsPerPage] = React.useState(10);
 
   useEffect(() => {
     rows = getCompanyData();
     setRows(rows);
   }, []);
+  
+  const handleChangePage = (event, newPage) => {
+    setPage(newPage);
+  };
+
+  const handleChangeRowsPerPage = (event) => {
+    setRowsPerPage(parseInt(event.target.value, 10));
+    setPage(0);
+  };
 
   return (
     <Box mt={20} sx={{width: '100%'}}>
+			<TablePagination
+			  component="div"
+			  count={rows.length}
+			  page={page}
+			  onPageChange={handleChangePage}
+			  rowsPerPage={rowsPerPage}
+			  onRowsPerPageChange={handleChangeRowsPerPage}
+			/>
       <Paper sx={{width: '100%', mb: 2}}>
         <Toolbar
           sx={{
@@ -49,7 +69,8 @@ function CompanyTable() {
               </TableRow>
             </TableHead>
             <TableBody>
-              {rows.map((row) => (
+              {rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+				   .map((row) => (
                 <TableRow
                   key={row.id}
                   sx={{'&:last-child td, &:last-child th': {border: 0}}}
