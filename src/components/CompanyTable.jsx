@@ -13,8 +13,8 @@ import TablePagination from '@mui/material/TablePagination';
 
 function CompanyTable() {
   let [rows, setRows] = useState([]);
-  const [page, setPage] = React.useState(2);
-  const [rowsPerPage, setRowsPerPage] = React.useState(10);
+  const [page, setPage] = useState(1);
+  const [rowsPerPage, setRowsPerPage] = useState(10);
 
   useEffect(() => {
     rows = getCompanyData();
